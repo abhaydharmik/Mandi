@@ -41,9 +41,9 @@ const Register = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {[
-              { label: "Full Name", type: "text", placeholder: "John Doe", onChange: setName },
-              { label: "Email", type: "email", placeholder: "you@example.com", onChange: setEmail },
-              { label: "Password", type: "password", placeholder: "••••••••", onChange: setPassword },
+              { label: "Full Name", type: "text", placeholder: "Your Full Name", onChange: setName },
+              { label: "Email", type: "email", placeholder: "Your Email", onChange: setEmail },
+              { label: "Password", type: "password", placeholder: "Your Password", onChange: setPassword },
             ].map((f) => (
               <div key={f.label}>
                 <label className="text-xs text-gray-400 dark:text-neutral-500 uppercase tracking-wider block mb-2">{f.label}</label>

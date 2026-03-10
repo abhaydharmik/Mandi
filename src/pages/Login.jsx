@@ -41,11 +41,11 @@ const Login = () => {
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="text-xs text-gray-400 dark:text-neutral-500 uppercase tracking-wider block mb-2">Email</label>
-              <input type="email" placeholder="you@example.com" className={inputClass} onChange={(e) => { setEmail(e.target.value); setError(""); }} />
+              <input type="email" placeholder="Your Email" className={inputClass} onChange={(e) => { setEmail(e.target.value); setError(""); }} />
             </div>
             <div>
               <label className="text-xs text-gray-400 dark:text-neutral-500 uppercase tracking-wider block mb-2">Password</label>
-              <input type="password" placeholder="••••••••" className={inputClass} onChange={(e) => { setPassword(e.target.value); setError(""); }} />
+              <input type="password" placeholder="Your Password" className={inputClass} onChange={(e) => { setPassword(e.target.value); setError(""); }} />
             </div>
             {error && (
               <p className="text-red-500 dark:text-red-400 text-xs flex items-center gap-1.5">
