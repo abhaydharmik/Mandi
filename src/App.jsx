@@ -7,11 +7,12 @@ import Products from "./pages/Products";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
+import { Toaster } from "react-hot-toast";
 
 function App() {
-
   return (
     <>
+      <Toaster position="bottom-left" reverseOrder={false} />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
