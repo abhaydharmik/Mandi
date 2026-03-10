@@ -1,34 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
+import { useCart } from "../hooks/useCart";
 
 const Cart = () => {
   document.title = "Mandi | Cart";
-  const [cart, setCart] = useState([]);
 
-  useEffect(() => { setCart(JSON.parse(localStorage.getItem("cart")) || []); }, []);
+  const { cart, removeItem, increaseQuantity, decreaseQuantity, clearCart, subtotal, tax, total } = useCart();
 
-  const sync = (updated) => {
-    setCart(updated);
-    localStorage.setItem("cart", JSON.stringify(updated));
-    window.dispatchEvent(new Event("cartUpdated"));
-  };
-
-  const handleRemove = (id) => sync(cart.filter((p) => p.id !== id));
-  const increaseQuantity = (id) => sync(cart.map((i) => i.id === id ? { ...i, quantity: i.quantity + 1 } : i));
-  const decreaseQuantity = (id) => sync(cart.map((i) => i.id === id && i.quantity > 1 ? { ...i, quantity: i.quantity - 1 } : i));
-  const handleClearCart = () => { if (window.confirm("Clear cart?")) sync([]); };
-
-  const subtotal = cart.reduce((t, i) => t + i.price * i.quantity, 0);
-  const tax = subtotal * 0.1;
-  const total = subtotal + tax;
+  const handleClearCart = () => { if (window.confirm("Clear cart?")) clearCart(); };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-neutral-950">
       <Navbar />
-
       <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 sm:pt-14 pb-16 sm:pb-24">
-
         <div className="flex items-end justify-between mb-6 sm:mb-10">
           <div>
             <p className="text-orange-500 text-xs tracking-[0.2em] uppercase font-medium mb-2 sm:mb-3">Checkout</p>
@@ -54,9 +39,7 @@ const Cart = () => {
             <Link to="/products" className="px-5 py-2.5 rounded-lg bg-orange-500 hover:bg-orange-400 text-white text-sm font-medium transition-colors">Browse Products</Link>
           </div>
         ) : (
-          /* Items on top, summary below on mobile; side-by-side on lg */
           <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4 sm:gap-5">
-
             <div className="lg:col-span-2 space-y-3">
               {cart.map((item) => (
                 <div key={item.id} className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-white/6 rounded-2xl p-4 sm:p-5 hover:border-gray-300 dark:hover:border-white/10 transition-colors duration-150">
@@ -67,10 +50,8 @@ const Cart = () => {
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between gap-2 mb-1">
                         <p className="text-gray-900 dark:text-white text-sm font-medium line-clamp-2 leading-snug">{item.title}</p>
-                        <button onClick={() => handleRemove(item.id)} className="text-gray-300 dark:text-neutral-600 hover:text-red-500 dark:hover:text-red-400 transition-colors shrink-0">
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                          </svg>
+                        <button onClick={() => removeItem(item.id)} className="text-gray-300 dark:text-neutral-600 hover:text-red-500 dark:hover:text-red-400 transition-colors shrink-0">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                       </div>
                       <p className="text-gray-400 dark:text-neutral-600 text-xs capitalize mb-3">{item.category}</p>
@@ -81,8 +62,8 @@ const Cart = () => {
                           <button onClick={() => increaseQuantity(item.id)} className="w-7 h-7 rounded-lg bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 text-gray-700 dark:text-white text-sm flex items-center justify-center transition-colors">+</button>
                         </div>
                         <div className="text-right">
-                          <p className="text-gray-400 dark:text-neutral-500 text-xs">${item.price} × {item.quantity}</p>
-                          <p className="text-gray-900 dark:text-white font-bold text-sm sm:text-base">${(item.price * item.quantity).toFixed(2)}</p>
+                          <p className="text-gray-400 dark:text-neutral-500 text-xs">₹{item.price} × {item.quantity}</p>
+                          <p className="text-gray-900 dark:text-white font-bold text-sm sm:text-base">₹{(item.price * item.quantity).toFixed(2)}</p>
                         </div>
                       </div>
                     </div>
@@ -91,15 +72,14 @@ const Cart = () => {
               ))}
             </div>
 
-            {/* Summary — sticky on desktop, normal flow on mobile */}
             <div className="lg:col-span-1">
               <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-white/6 rounded-2xl p-5 sm:p-6 lg:sticky lg:top-20">
                 <h2 className="text-gray-900 dark:text-white font-semibold mb-5 sm:mb-6">Order Summary</h2>
                 <div className="space-y-3 mb-4 sm:mb-5">
                   {[
-                    { label: "Subtotal", value: `$${subtotal.toFixed(2)}` },
+                    { label: "Subtotal", value: `₹${subtotal.toFixed(2)}` },
                     { label: "Shipping", value: "Free", green: true },
-                    { label: "Tax (10%)", value: `$${tax.toFixed(2)}` },
+                    { label: "Tax (10%)", value: `₹${tax.toFixed(2)}` },
                   ].map((row) => (
                     <div key={row.label} className="flex justify-between text-sm">
                       <span className="text-gray-500 dark:text-neutral-500">{row.label}</span>
@@ -109,7 +89,7 @@ const Cart = () => {
                 </div>
                 <div className="border-t border-gray-100 dark:border-white/6 pt-4 flex justify-between items-center mb-5 sm:mb-6">
                   <span className="text-gray-900 dark:text-white font-semibold">Total</span>
-                  <span className="text-gray-900 dark:text-white text-xl sm:text-2xl font-bold tabular-nums">${total.toFixed(2)}</span>
+                  <span className="text-gray-900 dark:text-white text-xl sm:text-2xl font-bold tabular-nums">₹{total.toFixed(2)}</span>
                 </div>
                 <button className="w-full py-3 rounded-xl bg-orange-500 hover:bg-orange-400 text-white text-sm font-semibold transition-colors duration-150 mb-3">Proceed to Checkout</button>
                 <Link to="/products" className="block text-center py-2.5 rounded-xl border border-gray-200 dark:border-white/6 text-gray-500 dark:text-neutral-400 hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-white/15 text-sm transition-all duration-150">Continue Shopping</Link>
