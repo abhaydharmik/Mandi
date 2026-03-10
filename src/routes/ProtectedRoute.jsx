@@ -1,28 +1,22 @@
-import React from 'react'
-import { Navigate } from 'react-router-dom'
+import React from 'react';
+import { Navigate } from 'react-router-dom';
 
-const ProtectedRoute = ({children}) => {
+export const SESSION_DURATION = 5 * 60 * 1000; // 5 minutes
 
-    const session = localStorage.getItem("session")
+const ProtectedRoute = ({ children }) => {
+  const session = localStorage.getItem("session");
 
-    if(!session){
-        return <Navigate to={"/"}/>
-    }
+  if (!session) return <Navigate to="/" />;
 
+  const isExpired = Date.now() - Number(session) > SESSION_DURATION;
 
-    const loginTime = Number(session)
+  if (isExpired) {
+    localStorage.removeItem("session");
+    alert("Session expired. Please login again.");
+    return <Navigate to="/" />;
+  }
 
-    const currentTime = Date.now()
+  return children;
+};
 
-    const isExpired = currentTime - loginTime > 5 * 60 * 1000
-
-    if(isExpired){
-        localStorage.removeItem("session")
-        alert("Session expired. Login again.")
-        return <Navigate to={"/"} />
-    }
-
-  return children
-}
-
-export default ProtectedRoute
+export default ProtectedRoute;
