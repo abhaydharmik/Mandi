@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const useAuth = () => {
@@ -11,16 +11,13 @@ export const useAuth = () => {
   const login = (email, password) => {
     setLoading(true);
     setError("");
-
     const storedUser = getUser();
-
     if (storedUser && email === storedUser.email && password === storedUser.password) {
       localStorage.setItem("session", Date.now());
       navigate("/dashboard");
     } else {
       setError("Invalid email or password");
     }
-
     setLoading(false);
   };
 
@@ -31,10 +28,11 @@ export const useAuth = () => {
     navigate("/");
   };
 
-  const logout = () => {
+  // useCallback makes logout stable — same reference across renders
+  const logout = useCallback(() => {
     localStorage.removeItem("session");
     navigate("/");
-  };
+  }, [navigate]);
 
   const updateProfile = (updates, onSuccess) => {
     setLoading(true);
