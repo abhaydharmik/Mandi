@@ -17,14 +17,7 @@ const ProductCard = ({ product }) => {
     localStorage.setItem("cart", JSON.stringify(cart));
     window.dispatchEvent(new Event("cartUpdated"));
 
-    toast.success("Added to cart", {
-      style: {
-        background: "#1a1a1a",
-        color: "#fff",
-        border: "1px solid rgba(255,255,255,0.08)",
-        fontSize: "13px",
-      },
-    });
+    toast.success("Added to cart");
 
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);

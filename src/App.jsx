@@ -12,7 +12,18 @@ import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <>
-      <Toaster position="bottom-left" reverseOrder={false} />
+      <Toaster
+        position="bottom-left"
+        reverseOrder={false}
+        toastOptions={{
+          style: {
+            background: "#1a1a1a",
+            color: "#fff",
+            border: "1px solid rgba(255,255,255,0.08)",
+            fontSize: "13px",
+          },
+        }}
+      />{" "}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />

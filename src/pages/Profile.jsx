@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const Profile = () => {
   document.title = "Mandi | Profile";
@@ -46,12 +46,6 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-neutral-950">
       <Navbar />
-      <Toaster
-        position="bottom-left"
-        toastOptions={{
-          style: { background: "#1a1a1a", color: "#fff", border: "1px solid rgba(255,255,255,0.08)", fontSize: "13px" },
-        }}
-      />
 
       <div className="max-w-4xl mx-auto px-6 pt-14 pb-24">
 
