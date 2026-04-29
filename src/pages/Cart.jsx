@@ -45,7 +45,7 @@ const Cart = () => {
                 <div key={item.id} className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-white/6 rounded-2xl p-4 sm:p-5 hover:border-gray-300 dark:hover:border-white/10 transition-colors duration-150">
                   <div className="flex gap-3 sm:gap-5">
                     <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-gray-50 dark:bg-white flex items-center justify-center shrink-0 p-2 border border-gray-100 dark:border-0">
-                      <img src={item.image} alt={item.title} className="w-full h-full object-contain" />
+                      <img src={item.thumbnail} alt={item.title} className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between gap-2 mb-1">
